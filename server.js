@@ -70,3 +70,5 @@ app.delete('/recipes/:recipeId', async (request, response) => {
     response.status(500).send('Internal Server Error')
   }
 });
+
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
