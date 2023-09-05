@@ -47,7 +47,7 @@ app.post('/recipes', async (request, response) => {
         `${OPEN_AI_URL}`,
         recipeRequest
       );
-      let openAiRecipe = openAiRecipeResponse.data.choices[0].content;
+      let openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
       let { dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin } = openAiRecipe;
       let newRecipe = new RecipeModel({ dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin });
       let recipe = await newRecipe.save();
@@ -61,9 +61,32 @@ app.post('/recipes', async (request, response) => {
 
 // UPDATE
 app.put('/recipes/:recipeId', async (request, response) => {
-  let id = request.params.recipeId;
   try {
-    await RecipeModel.replaceOne({ _id: id }, request.body);
+    let id = request.params.recipeId;
+    let ingredients = request.body.ingredients;
+    let updatedRecipe = null;
+    if (!id) {
+      response.status(400).send('Please send valid id');
+    } else {
+      let recipeRequest = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{
+          "role": "user",
+          "content": `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food fish that uses these ingredients: ${ingredients}. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin.`
+        }]
+      }
+      let openAiRecipeResponse = await axios.get(
+        `${OPEN_AI_URL}`,
+        recipeRequest
+      );
+      let openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
+      let { dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin } = openAiRecipe;
+      let newRecipe = new RecipeModel({ dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin });
+      let recipe = await newRecipe.save();
+      console.log('Updated recipe created!: ' + recipe);
+      updatedRecipe = recipe;
+    }
+    await RecipeModel.replaceOne({ _id: id }, updatedRecipe);
     let newRecipe = await RecipeModel.findOne({ _id: id });
     response.status(200).json(newRecipe);
   } catch (error) {
