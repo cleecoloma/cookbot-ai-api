@@ -8,7 +8,7 @@ const RecipeModel = require('./models/RecipeModel.js');
 const authorize = require('./auth/authorize.js');
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
-const OPENAI_URL = prcoess.env.OPENAI_URL;
+const OPEN_AI_URL = prcoess.env.OPEN_AI_URL;
 const app = express();
 
 app.use(cord());
@@ -44,7 +44,7 @@ app.post('/recipes', async (request, response) => {
         }]
       }
       let openAiRecipeResponse = await axios.get(
-        `${OPENAI_URL}`,
+        `${OPEN_AI_URL}`,
         recipeRequest
       );
       let openAiRecipe = openAiRecipeResponse.data.choices[0].content;
