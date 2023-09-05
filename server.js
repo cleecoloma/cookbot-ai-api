@@ -8,6 +8,7 @@ const RecipeModel = require('./models/RecipeModel.js');
 const authorize = require('./auth/authorize.js');
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
+const OPENAI_URL = prcoess.env.OPENAI_URL;
 const app = express();
 
 app.use(cord());
@@ -35,6 +36,19 @@ app.post('/recipes', async (request, response) => {
     if (!ingredients.length) {
       response.status(400).send('Please send valid food ingredients');
     } else {
+      let recipeRequest = {
+        "model": "gpt-3.5-turbo",
+        "messages": [{
+          "role": "user",
+          "content": `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food fish that uses these ingredients: ${ingredients}. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin.`
+        }]
+      }
+      let openAiRecipeResponse = await axios.get(
+        `${OPENAI_URL}`,
+        recipeRequest
+      );
+      let openAiRecipe = openAiRecipeResponse.data.choices[0].content;
+      let { dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin } = openAiRecipe;
       let newRecipe = new RecipeModel({ dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin });
       let recipe = await newRecipe.save();
       console.log('New recipe created!: ' + recipe);
