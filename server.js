@@ -35,7 +35,7 @@ app.post('/recipes', async (request, response) => {
     if (!ingredients.length) {
       response.status(400).send('Please send valid food ingredients');
     } else {
-      let newRecipe = new RecipeModel({ dishName, cookingSteps, cookingDuration, countryOfOrigin });
+      let newRecipe = new RecipeModel({ dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin });
       let recipe = await newRecipe.save();
       console.log('New recipe created!: ' + recipe);
       response.json(recipe);
