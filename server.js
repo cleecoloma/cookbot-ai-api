@@ -16,6 +16,17 @@ app.use(authorize);
 
 mongoose.connect(MONGODB_URL);
 
+// READ
+app.get('/recipes', async (request, response) => {
+  try {
+    let recipes = await RecipeModel.find({});
+    response.json(recipes);
+  } catch (error) {
+    console.log('Something when wrong when finding recipes', error);
+    response.status(500).send(error);
+  }
+})
+
 // CREATE
 app.post('/recipes', async (request, response) => {
   try {
