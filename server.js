@@ -44,3 +44,16 @@ app.post('/recipes', async (request, response) => {
     response.status(400).send('Please send proper ingredient(s): ', error);
   }
 });
+
+// UPDATE
+app.put('/recipes/:recipeId', async (request, response) => {
+  let id = request.params.recipeId;
+  try {
+    await RecipeModel.replaceOne({ _id: id }, request.body);
+    let newRecipe = await RecipeModel.findOne({ _id: id });
+    response.status(200).json(newRecipe);
+  } catch (error) {
+    response.status(400).send(error);
+  }
+});
+
