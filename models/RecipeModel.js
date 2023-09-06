@@ -23,6 +23,10 @@ const RecipeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  imageUrl: {
+    type: String,
+    required: true,
+  },
 });
 
 const RecipeModel = mongoose.model('recipe', RecipeSchema);
