@@ -4,21 +4,13 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const RecipeModel = require('./models/RecipeModel.js');
-// const authorize = require('./auth/authorize.js');
-// const OpenAI = require('openai');
-const axios = require('axios');
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
-// const OPEN_AI_URL = process.env.OPEN_AI_URL;
-// const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const handleCreateRecipe = require('./modules/createRecipe.js')
 const handleGetRecipe = require('./modules/getRecipe.js');
 const handleUpdateRecipe = require('./modules/updateRecipe.js');
 const handleDeleteRecipe = require('./modules/deleteRecipe.js')
 const app = express();
-
-
 
 
 app.use(cors());
