@@ -13,6 +13,7 @@ const MONGODB_URL = process.env.MONGODB_URL;
 // const OPEN_AI_URL = process.env.OPEN_AI_URL;
 // const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const handleCreateRecipe = require('./modules/createRecipe.js')
+const handleGetRecipe = require('./modules/getRecipe.js')
 const app = express();
 
 
@@ -25,15 +26,7 @@ app.use(express.json());
 mongoose.connect(MONGODB_URL);
 
 // READ
-app.get('/recipes', async (request, response) => {
-  try {
-    let recipes = await RecipeModel.find({});
-    response.json(recipes);
-  } catch (error) {
-    console.log('Something when wrong when finding recipes', error);
-    response.status(500).send(error);
-  }
-})
+app.get('/recipes', handleGetRecipe);
 
 // CREATE
 app.post('/recipes', handleCreateRecipe);
