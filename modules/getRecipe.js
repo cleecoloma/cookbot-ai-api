@@ -1,5 +1,7 @@
 'use strict';
 
+const RecipeModel = require('../models/RecipeModel.js');
+
 const handleGetRecipe = async (request, response) => {
   try {
     let recipes = await RecipeModel.find({});
