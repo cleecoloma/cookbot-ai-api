@@ -16,8 +16,6 @@ const app = express();
 //   apiKey: process.env.OPENAI_API_KEY,
 // });
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
 app.use(cors());
 app.use(express.json());
 // app.use(authorize);
@@ -39,35 +37,52 @@ app.get('/recipes', async (request, response) => {
 app.post('/recipes', async (request, response) => {
   try {
     console.log('POST request: ', request.body);
-    let ingredients = request.body.ingredients;
-    if (!ingredients.length) {
-      response.status(400).send('Please send valid food ingredients');
-    } else {
-      let recipeRequest = {
-        "model": "gpt-3.5-turbo",
-        "messages": [{
-          "role": "user",
-          "content": `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food fish that uses these ingredients: ${ingredients}. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin.`
-        }]
-      }
-      let headers = {
-          "Authorization": `Bearer ${OPENAI_API_KEY}`,
-          "Content-Type": 'application/json',
-        };
-      let openAiRecipeResponse = await axios.post(
-        OPEN_AI_URL,
-        recipeRequest,
-        { headers }
-      );
-      let openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
-      let { dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin } = openAiRecipe;
-      let newRecipe = new RecipeModel({ dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin });
-      let recipe = await newRecipe.save();
-      console.log('New recipe created!: ' + recipe);
-      response.json(recipe);
-    }
+    const { foodItems } = request.body;
+    let recipeRequest = {
+      model: 'gpt-3.5-turbo',
+      messages: [
+        {
+          role: 'user',
+          content: `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food dish that uses these ingredients: ${foodItems}. Don't use any other ingredients other than readily available pantry items. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration, and countryOfOrigin where ingredients and cookingSteps as arrays`,
+        },
+      ],
+    };
+    let header = {
+      headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    };
+    let openAiRecipeResponse = await axios.post(
+      OPEN_AI_URL,
+      recipeRequest,
+      header
+    );
+    let openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
+    const parsedRecipe = JSON.parse(openAiRecipe);
+    // console.log(openAiRecipe);
+    // console.log(parsedRecipe);
+    let { dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin } = parsedRecipe;
+    // let {
+    //   dishName,
+    //   ingredients,
+    //   cookingSteps,
+    //   cookingDuration,
+    //   countryOfOrigin,
+    // } = openAiRecipe;
+    let newRecipe = new RecipeModel({
+      dishName,
+      ingredients,
+      cookingSteps,
+      cookingDuration,
+      countryOfOrigin,
+    });
+    let recipe = await newRecipe.save();
+    console.log('New recipe created!: ' + recipe);
+    response.json(recipe);
   } catch (error) {
-    response.status(400).send(error);
+    console.error('Network Error:', error);
+    response.status(500).send('Internal server error');
   }
 });
 

@@ -16,7 +16,7 @@ const RecipeSchema = new mongoose.Schema({
     required: true,
   },
   cookingDuration: {
-    type: Number,
+    type: String,
     required: true,
   },
   countryOfOrigin: {
