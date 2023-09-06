@@ -13,7 +13,8 @@ const MONGODB_URL = process.env.MONGODB_URL;
 // const OPEN_AI_URL = process.env.OPEN_AI_URL;
 // const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const handleCreateRecipe = require('./modules/createRecipe.js')
-const handleGetRecipe = require('./modules/getRecipe.js')
+const handleGetRecipe = require('./modules/getRecipe.js');
+const handleUpdateRecipe = require('./modules/updateRecipe.js');
 const app = express();
 
 
@@ -32,39 +33,7 @@ app.get('/recipes', handleGetRecipe);
 app.post('/recipes', handleCreateRecipe);
 
 // UPDATE
-app.put('/recipes/:recipeId', async (request, response) => {
-  try {
-    let id = request.params.recipeId;
-    let ingredients = request.body.ingredients;
-    let updatedRecipe = null;
-    if (!id) {
-      response.status(400).send('Please send valid id');
-    } else {
-      let recipeRequest = {
-        "model": "gpt-3.5-turbo",
-        "messages": [{
-          "role": "user",
-          "content": `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food fish that uses these ingredients: ${ingredients}. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin.`
-        }]
-      }
-      let openAiRecipeResponse = await axios.get(
-        `${OPEN_AI_URL}`,
-        recipeRequest
-      );
-      let openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
-      let { dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin } = openAiRecipe;
-      let newRecipe = new RecipeModel({ dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin });
-      let recipe = await newRecipe.save();
-      console.log('Updated recipe created!: ' + recipe);
-      updatedRecipe = recipe;
-    }
-    await RecipeModel.replaceOne({ _id: id }, updatedRecipe);
-    let newRecipe = await RecipeModel.findOne({ _id: id });
-    response.status(200).json(newRecipe);
-  } catch (error) {
-    response.status(400).send(error);
-  }
-});
+app.put('/recipes/:recipeId', handleUpdateRecipe);
 
 // DELETE
 app.delete('/recipes/:recipeId', async (request, response) => {
