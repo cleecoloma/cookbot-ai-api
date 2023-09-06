@@ -5,6 +5,7 @@ const axios = require('axios');
 
 const OPEN_AI_URL = process.env.OPEN_AI_URL;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPEN_AI_IMAGE_URL = process.env.OPEN_AI_IMAGE_URL;
 const RecipeModel = require('../models/RecipeModel.js');
 
 const header = {
@@ -43,12 +44,28 @@ const handleUpdateRecipe = async (request, response) => {
       countryOfOrigin,
     } = parsedRecipe;
 
+    const imageRequest = {
+      model: 'image-alpha-001',
+      prompt: `${dishName} plated beautifully. If the following word: ${countryOfOrigin} is not a country, place the image setting in a michelin start restaurant setting. If not, place the image in a setting related to ${countryOfOrigin} country`,
+      n: 1,
+      size: '1024x1024',
+    };
+
+    const openAiImageResponse = await axios.post(
+      OPEN_AI_IMAGE_URL,
+      imageRequest,
+      header
+    );
+
+    const imageUrl = openAiImageResponse.data.data[0].url;
+
     const newRecipe = new RecipeModel({
       dishName,
       ingredients,
       cookingSteps,
       cookingDuration,
       countryOfOrigin,
+      imageUrl,
     });
 
     await RecipeModel.replaceOne({ _id: id }, newRecipe);
