@@ -7,14 +7,14 @@ const mongoose = require('mongoose');
 const RecipeModel = require('./models/RecipeModel.js');
 // const authorize = require('./auth/authorize.js');
 const OpenAI = require('openai');
+const axios = require('axios');
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
 const OPEN_AI_URL = process.env.OPEN_AI_URL;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const app = express();
 
-// const openai = new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY,
-// });
+
 
 app.use(cors());
 app.use(express.json());
@@ -60,16 +60,8 @@ app.post('/recipes', async (request, response) => {
     );
     let openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
     const parsedRecipe = JSON.parse(openAiRecipe);
-    // console.log(openAiRecipe);
-    // console.log(parsedRecipe);
     let { dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin } = parsedRecipe;
-    // let {
-    //   dishName,
-    //   ingredients,
-    //   cookingSteps,
-    //   cookingDuration,
-    //   countryOfOrigin,
-    // } = openAiRecipe;
+
     let newRecipe = new RecipeModel({
       dishName,
       ingredients,
