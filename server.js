@@ -15,6 +15,7 @@ const MONGODB_URL = process.env.MONGODB_URL;
 const handleCreateRecipe = require('./modules/createRecipe.js')
 const handleGetRecipe = require('./modules/getRecipe.js');
 const handleUpdateRecipe = require('./modules/updateRecipe.js');
+const handleDeleteRecipe = require('./modules/deleteRecipe.js')
 const app = express();
 
 
@@ -36,17 +37,6 @@ app.post('/recipes', handleCreateRecipe);
 app.put('/recipes/:recipeId', handleUpdateRecipe);
 
 // DELETE
-app.delete('/recipes/:recipeId', async (request, response) => {
-  if (!request.params.recipeId) {
-    request.status(404).send('Please provide a valid recipe ID');
-    return;
-  }
-  try {
-    let recipe = await RecipeModel.findByIdAndDelete(request.params.recipeId);
-    response.status(204).send('Success');
-  } catch (error) {
-    response.status(500).send('Internal Server Error')
-  }
-});
+app.delete('/recipes/:recipeId', handleDeleteRecipe);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
