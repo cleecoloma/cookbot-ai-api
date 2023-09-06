@@ -6,13 +6,15 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const RecipeModel = require('./models/RecipeModel.js');
 // const authorize = require('./auth/authorize.js');
-const OpenAI = require('openai');
+// const OpenAI = require('openai');
 const axios = require('axios');
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
-const OPEN_AI_URL = process.env.OPEN_AI_URL;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+// const OPEN_AI_URL = process.env.OPEN_AI_URL;
+// const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const handleCreateRecipe = require('./modules/createRecipe.js')
 const app = express();
+
 
 
 
@@ -34,49 +36,7 @@ app.get('/recipes', async (request, response) => {
 })
 
 // CREATE
-app.post('/recipes', async (request, response) => {
-  try {
-    console.log('POST request: ', request.body);
-    const { foodItems } = request.body;
-    let recipeRequest = {
-      model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'user',
-          content: `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food dish that uses these ingredients: ${foodItems}. Don't use any other ingredients other than readily available pantry items. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration, and countryOfOrigin where ingredients and cookingSteps as arrays`,
-        },
-      ],
-    };
-    let header = {
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    };
-    let openAiRecipeResponse = await axios.post(
-      OPEN_AI_URL,
-      recipeRequest,
-      header
-    );
-    let openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
-    const parsedRecipe = JSON.parse(openAiRecipe);
-    let { dishName, ingredients, cookingSteps, cookingDuration, countryOfOrigin } = parsedRecipe;
-
-    let newRecipe = new RecipeModel({
-      dishName,
-      ingredients,
-      cookingSteps,
-      cookingDuration,
-      countryOfOrigin,
-    });
-    let recipe = await newRecipe.save();
-    console.log('New recipe created!: ' + recipe);
-    response.json(recipe);
-  } catch (error) {
-    console.error('Network Error:', error);
-    response.status(500).send('Internal server error');
-  }
-});
+app.post('/recipes', handleCreateRecipe);
 
 // UPDATE
 app.put('/recipes/:recipeId', async (request, response) => {
