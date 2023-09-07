@@ -40,12 +40,11 @@ const handleCreateRecipe = async (request, response) => {
       ingredients,
       cookingSteps,
       cookingDuration,
-      countryOfOrigin,
     } = parsedRecipe;
 
     const imageRequest = {
       model: 'image-alpha-001',
-      prompt: `${dishName} plated beautifully. If the following word: ${countryOfOrigin} is not a country, place the image setting in a michelin start restaurant setting. If not, place the image in a setting related to ${countryOfOrigin} country`,
+      prompt: `${dishName} plated beautifully. Place the image setting in a michelin start restaurant setting.`,
       n: 1,
       size: '1024x1024',
     };
@@ -63,7 +62,6 @@ const handleCreateRecipe = async (request, response) => {
       ingredients,
       cookingSteps,
       cookingDuration,
-      countryOfOrigin,
       imageUrl,
     });
     const recipe = await newRecipe.save();
