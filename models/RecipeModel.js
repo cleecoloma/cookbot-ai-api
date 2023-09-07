@@ -19,10 +19,6 @@ const RecipeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  countryOfOrigin: {
-    type: String,
-    required: true,
-  },
   imageUrl: {
     type: String,
     required: true,

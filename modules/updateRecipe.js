@@ -19,13 +19,14 @@ const handleUpdateRecipe = async (request, response) => {
   try {
     console.log('PUT request: ', request.body);
     const id = request.params.recipeId;
-    const { foodItems } = request.body;
+    // const { foodItems } = request.body;
+    // console.log('Updated ingredients: ', foodItems);
     const recipeRequest = {
       model: 'gpt-3.5-turbo',
       messages: [
         {
           role: 'user',
-          content: `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food dish that uses these ingredients: ${foodItems}. Don't use any other ingredients other than readily available pantry items. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration, and countryOfOrigin where ingredients and cookingSteps as arrays`,
+          content: `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food dish that uses these ingredients: ${request.body}. Don't use any other ingredients other than readily available pantry items. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration, and countryOfOrigin where ingredients and cookingSteps as arrays`,
         },
       ],
     };
@@ -41,12 +42,13 @@ const handleUpdateRecipe = async (request, response) => {
       ingredients,
       cookingSteps,
       cookingDuration,
-      countryOfOrigin,
     } = parsedRecipe;
+    
+    console.log(openAiRecipeResponse);
 
     const imageRequest = {
       model: 'image-alpha-001',
-      prompt: `${dishName} plated beautifully. If the following word: ${countryOfOrigin} is not a country, place the image setting in a michelin start restaurant setting. If not, place the image in a setting related to ${countryOfOrigin} country`,
+      prompt: `${dishName} plated beautifully. Place the image setting in a michelin start restaurant setting.`,
       n: 1,
       size: '1024x1024',
     };
@@ -59,18 +61,27 @@ const handleUpdateRecipe = async (request, response) => {
 
     const imageUrl = openAiImageResponse.data.data[0].url;
 
-    const newRecipe = new RecipeModel({
+    // Create an object with the updated recipe data
+    const updatedRecipeData = {
       dishName,
       ingredients,
       cookingSteps,
       cookingDuration,
-      countryOfOrigin,
       imageUrl,
-    });
+    };
 
-    await RecipeModel.replaceOne({ _id: id }, newRecipe);
-    const updatedRecipe = await RecipeModel.findOne({ _id: id });
-    console.log('Recipe updated!: ' + updatedRecipe);
+    console.log(updatedRecipeData);
+
+    // Use findByIdAndUpdate to update the recipe while keeping the _id
+    const updatedRecipe = await RecipeModel.findByIdAndUpdate(
+      id,
+      updatedRecipeData,
+      {
+        new: true, // Return the updated recipe
+      }
+    );
+
+    console.log('Recipe updated!', updatedRecipe);
     response.json(updatedRecipe);
   } catch (error) {
     console.error('Network Error:', error);
