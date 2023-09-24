@@ -3,6 +3,10 @@
 const mongoose = require('mongoose');
 
 const RecipeSchema = new mongoose.Schema({
+  user: {
+    type: String,
+    required: true,
+  },
   dishName: {
     type: String,
     required: true,
