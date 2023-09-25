@@ -17,8 +17,8 @@ const header = {
 
 const handleCreateRecipe = async (request, response) => {
   try {
-    console.log('POST request: ', request.body);
-    const { foodItems } = request.body;
+    // console.log('POST request: ', request.body);
+    const { user, foodItems } = request.body;
     const recipeRequest = {
       model: 'gpt-3.5-turbo',
       messages: [
@@ -35,12 +35,8 @@ const handleCreateRecipe = async (request, response) => {
     );
     const openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
     const parsedRecipe = JSON.parse(openAiRecipe);
-    const {
-      dishName,
-      ingredients,
-      cookingSteps,
-      cookingDuration,
-    } = parsedRecipe;
+    const { dishName, ingredients, cookingSteps, cookingDuration } =
+      parsedRecipe;
 
     const imageRequest = {
       model: 'image-alpha-001',
@@ -56,8 +52,11 @@ const handleCreateRecipe = async (request, response) => {
     );
 
     const imageUrl = openAiImageResponse.data.data[0].url;
+    const timestamp = Date.now();
 
     const newRecipe = new RecipeModel({
+      timestamp,
+      user,
       dishName,
       ingredients,
       cookingSteps,
