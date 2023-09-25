@@ -37,13 +37,9 @@ const handleUpdateRecipe = async (request, response) => {
     );
     const openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
     const parsedRecipe = JSON.parse(openAiRecipe);
-    const {
-      dishName,
-      ingredients,
-      cookingSteps,
-      cookingDuration,
-    } = parsedRecipe;
-    
+    const { dishName, ingredients, cookingSteps, cookingDuration } =
+      parsedRecipe;
+
     console.log(openAiRecipeResponse);
 
     const imageRequest = {
@@ -60,9 +56,11 @@ const handleUpdateRecipe = async (request, response) => {
     );
 
     const imageUrl = openAiImageResponse.data.data[0].url;
+    const timestamp = Date.now();
 
     // Create an object with the updated recipe data
     const updatedRecipeData = {
+      timestamp,
       dishName,
       ingredients,
       cookingSteps,

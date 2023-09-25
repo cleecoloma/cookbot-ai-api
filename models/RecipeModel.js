@@ -3,6 +3,10 @@
 const mongoose = require('mongoose');
 
 const RecipeSchema = new mongoose.Schema({
+  timestamp:{
+    type: Date,
+    required: true,
+  },
   user: {
     type: String,
     required: true,
