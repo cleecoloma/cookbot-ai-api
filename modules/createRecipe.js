@@ -64,7 +64,6 @@ const handleCreateRecipe = async (request, response) => {
       imageUrl,
     });
     const recipe = await newRecipe.save();
-    console.log('New recipe created!: ' + recipe);
     response.json(recipe);
   } catch (error) {
     console.error('Network Error:', error);
