@@ -39,7 +39,7 @@ const handleCreateRecipe = async (request, response) => {
       parsedRecipe;
 
     const imageRequest = {
-      model: 'image-alpha-001',
+      // model: 'image-alpha-001',
       prompt: `${dishName} plated beautifully. Place the image setting in a michelin start restaurant setting.`,
       n: 1,
       size: '1024x1024',
