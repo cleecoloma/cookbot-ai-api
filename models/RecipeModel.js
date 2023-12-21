@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 const RecipeSchema = new mongoose.Schema({
-  timestamp:{
+  timestamp: {
     type: Date,
     required: true,
   },
@@ -24,7 +24,15 @@ const RecipeSchema = new mongoose.Schema({
     required: true,
   },
   cookingDuration: {
-    type: String,
+    type: Number,
+    required: true,
+  },
+  prepDuration: {
+    type: Number,
+    required: true,
+  },
+  servingSize: {
+    type: Number,
     required: true,
   },
   imageUrl: {

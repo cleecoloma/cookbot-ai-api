@@ -24,7 +24,7 @@ const handleCreateRecipe = async (request, response) => {
       messages: [
         {
           role: 'user',
-          content: `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food dish that uses these ingredients: ${foodItems}. Don't use any other ingredients other than readily available pantry items. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration, and countryOfOrigin where ingredients and cookingSteps as arrays`,
+          content: `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food dish that uses these ingredients: ${foodItems}. Don't use any other ingredients other than readily available pantry items. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration as a number in minutes, servingSize as a number, and prepDuration as a number in minutes where ingredients and cookingSteps as arrays`,
         },
       ],
     };
@@ -39,7 +39,6 @@ const handleCreateRecipe = async (request, response) => {
       parsedRecipe;
 
     const imageRequest = {
-      // model: 'image-alpha-001',
       prompt: `${dishName} plated beautifully. Place the image setting in a michelin start restaurant setting.`,
       n: 1,
       size: '1024x1024',
