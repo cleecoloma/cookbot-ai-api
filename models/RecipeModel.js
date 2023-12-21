@@ -15,6 +15,10 @@ const RecipeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  dishDescription: {
+    type: String,
+    required: true,
+  },
   ingredients: {
     type: Array,
     required: true,
@@ -24,15 +28,15 @@ const RecipeSchema = new mongoose.Schema({
     required: true,
   },
   cookingDuration: {
-    type: Number,
+    type: String,
     required: true,
   },
   prepDuration: {
-    type: Number,
+    type: String,
     required: true,
   },
   servingSize: {
-    type: Number,
+    type: String,
     required: true,
   },
   imageUrl: {

@@ -24,7 +24,7 @@ const handleCreateRecipe = async (request, response) => {
       messages: [
         {
           role: 'user',
-          content: `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food dish that uses these ingredients: ${foodItems}. Don't use any other ingredients other than readily available pantry items. Provide your response in a json object with the following properties: dishName, ingredients, cookingSteps, cookingDuration as a number in minutes, servingSize as a number, and prepDuration as a number in minutes where ingredients and cookingSteps as arrays`,
+          content: `I will give you a list of food ingredients. If one of the ingredients is not a food item, provide a response starting with the text Error. If all ingredients are food items, please provide a food dish that uses these ingredients: ${foodItems}. Don't use any other ingredients other than readily available pantry items. Provide your response in a json object with the following properties: dishName, dishDescription as short description of the dish, ingredients, cookingSteps, cookingDuration in minutes, servingSize, and prepDuration in minutes where ingredients and cookingSteps as arrays`,
         },
       ],
     };
@@ -35,8 +35,15 @@ const handleCreateRecipe = async (request, response) => {
     );
     const openAiRecipe = openAiRecipeResponse.data.choices[0].message.content;
     const parsedRecipe = JSON.parse(openAiRecipe);
-    const { dishName, ingredients, cookingSteps, cookingDuration } =
-      parsedRecipe;
+    const {
+      dishName,
+      dishDescription,
+      ingredients,
+      cookingSteps,
+      cookingDuration,
+      prepDuration,
+      servingSize,
+    } = parsedRecipe;
 
     const imageRequest = {
       prompt: `${dishName} plated beautifully. Place the image setting in a michelin start restaurant setting.`,
@@ -57,9 +64,12 @@ const handleCreateRecipe = async (request, response) => {
       timestamp,
       user,
       dishName,
+      dishDescription,
       ingredients,
       cookingSteps,
       cookingDuration,
+      prepDuration,
+      servingSize,
       imageUrl,
     });
     const recipe = await newRecipe.save();
