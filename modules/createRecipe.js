@@ -46,7 +46,7 @@ const handleCreateRecipe = async (request, response) => {
     } = parsedRecipe;
 
     const imageRequest = {
-      prompt: `${dishName} plated beautifully. Place the image setting in a michelin start restaurant setting.`,
+      prompt: `${dishName} plated beautifully. Utilize the following list of ingredients: ${ingredients} to properly depict the dish as required. Place the image setting in a michelin start restaurant setting.`,
       n: 1,
       size: '1024x1024',
     };
