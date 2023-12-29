@@ -1,42 +1,142 @@
-# Cook Bot API
-[Deployed Link](https://cookbot-ai-app.netlify.app/)
-## CookBot is a full-stack application utilizing OpenAI's API in order to build users recipe cards that they can save to their profiles based on their input. Ideally, the user will provide a list of ingredients of items they already have, and the OpenAI will query the request and return an object that the user can view based on the parameters set in the display modal.
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/cleecoloma/portfolio-website">
+    <img src="/public/images/cookbot-logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-**Added Features and Refactored Code**
-1. Demo Account - I added demo account to user doesn't have to input personal information to view the functionality of the web application.
-2. Recipe Image - AI generated images from OpenAI API only lasts for ONE hour. Instead of displaying no image after one hour, I added a feature to check the time stamp of the AI generated image. If two hours have elapsed from creation, web application will display a default image (spoon and fork image).
+<h3 align="center">CookBot-AI</h3>
+<p align="center">
+  <a href="https://app.netlify.com/sites/cleecoloma/deploys" target="_blank">
+    <img src="https://api.netlify.com/api/v1/badges/67c37c2a-ffc6-4672-b1cb-708b7373433c/deploy-status" alt="Netlify Status" />
+  </a>
+</p>
 
-> **NOTE:** This is a forked repository of my team project that was developed with 2 other teammates. See below for old version of code/repository.
-* [Old CookBotAI APP](https://github.com/CookBotAI/cook-bot-app)
+</div>
 
-## Getting Started
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+      <li><a href="#note">Note</a>
+      </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#demo">Demo</a>
+    </li>
+    <li>
+      <a href="#features">Features</a>
+    </li>
+    <li>
+      <a href="#technologies">Technologies</a>
+    </li>
+        <li>
+      <a href="#uml">UML Diagram</a>
+    </li>
+    <li>
+      <a href="#installation">Installation</a>
+            <ul>
+      <li><a href="#prerequisites">Prerequisites</a>
+      </li>
+            <li><a href="#cloning">Cloning the Repository</a>
+      </li>
+            <li><a href="#configure">Configure</a>
+      </li>
+      <li><a href="#start">Start</a>
+      </li>
+      </ul>
+    </li>
+        <li>
+      <a href="#contact">Contact</a>
+    </li>
+  </ol>
+</details>
 
-### Requirements
+<!-- ABOUT THE PROJECT -->
 
-For this application to work, cookbot-ai-api (back-end) also needs to be installed. GitHub repository located here: 
-[CookBot AI APP](https://github.com/cleecoloma/cookbot-ai-app)
+## About The Project
 
-### Node
+The CookBot AI Recipe Project is a web application designed to assist users in managing and exploring recipes. It leverages the power of artificial intelligence to simplify the process of creating, organizing, and discovering new recipes. Whether you're a cooking enthusiast, a culinary expert, or just looking for meal inspiration, CookBot AI offers a user-friendly platform to streamline your cooking experience.
 
-Install Node and NPM
+### Note
 
-[Node](http://nodejs.org/) is really easy to install & now include [NPM](https://npmjs.org/).
-You should be able to run the following command after the installation procedure
-below.
+This is a forked repository of my team project that was developed with 2 other teammates. I was a key contributor for this project. See below for old version of the application.
 
-$ node --version
-v0.10.24
+- [Old CookBotAI Repo](https://github.com/CookBotAI/cook-bot-api)
 
-$ npm --version
-1.3.21
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Install
+<!-- DEMO -->
 
-1. git clone https://github.com/cleecoloma/cookbot-ai-app.git
-2. cd cookbot-ai-app
+## Demo
+
+Here's the live link: [CookBot AI](https://cookbot-ai-app.netlify.app/)
+
+<div align="center">
+    <img src="/public/images/how-to-shrimp.gif"  alt="Demo"/>
+</div>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- FEATURES -->
+
+## Features
+
+- **User Authentication:** Securely register and log in using authentication services.
+- **Recipe Management:** Create, read, and delete your recipes with ease.
+- **AI-Generated Content:** Access AI-generated images and content for your recipes.
+- **Responsive Design:** Enjoy a seamless experience on various devices.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- TECHNOLOGIES -->
+
+## Technologies
+
+- **Frontend:** React.js for a dynamic and interactive user interface.
+- **Backend:** Node.js and Express.js for server-side logic.
+- **Database:** MongoDB for storing recipe data.
+- **Authentication:** Auth0 for user authentication.
+- **OpenAI Integration:** Chat Completions API for recipe generation and DALL·E‍ API for image generation.
+- **Additional Libraries and Frameworks:** React Bootstrap, MUI icons.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- UML Diagram -->
+
+## UML Diagram
+
+![UML diagram](/public/images/uml-diagram.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- INSTALLATION -->
+
+## Installation
+
+### Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- Node.js (preferably the latest stable version)
+- npm (usually comes with Node.js)
+- Git for cloning the repository
+- A text editor or IDE of your choice (e.g., VSCode, Sublime Text)
+
+### Cloning
+
+This is for the backend portion of this application.
+See the following readme file for frontend portion: [CookBot APP](https://github.com/cleecoloma/cookbot-ai-app/blob/main/README.md)
+
+1. git clone https://github.com/cleecoloma/cookbot-ai-api.git
+2. cd cookbot-ai-api
 3. npm install
 
-### Configure app
+### Configure
 
 ```text
 OPEN_AI_URL={OpenAI Chat Completion Endpoint}
@@ -46,23 +146,25 @@ JWKS_URI={Auth0 JSON Web Key Set}
 OPENAI_API_KEY={OpenAI API Key}
 ```
 
-### Start app
+### Start
 
-npm run dev (development mode)
-npm run build (production mode)
+1. npm run dev (development mode)
+2. npm run build (production mode)
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Architecture
-![figma wireframe image](https://github.com/CookBotAI/cook-bot-app/assets/53655406/e47ceb9f-bb96-458f-921f-59c713052e38)
+<!-- LICENSE -->
 
-### See link below for Database Schema Diagram
-[Invision Whiteboard](https://codepeoples.invisionapp.com/freehand/Code-301-Project-WSprYFpy9?inviteToken=022587-dfbf0397de430aaecb044f49649ae883)
+## License
 
-## Language and Tools
-> Language: JavaScript, HTML5, CSS3
-> Tools: VScode, Git, GitHub, MongoDB, Express, React, Node, OpenAI API, Axios, Bootstrap, Trello, Mongoose
+Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-## Team members
-1. Anthony Cunningham
-2. David Danilchik
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- LICENSE -->
+
+## Contact
+
+If you have any questions or comments, don't hesitate to reach out to me at [chesterleecoloma.com](https://chesterleecoloma.com/).
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
