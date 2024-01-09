@@ -108,7 +108,7 @@ Here's the live link: [CookBot AI](https://cookbot-ai-app.netlify.app/)
 
 <!-- UML Diagram -->
 
-## UML Diagram
+## UML
 
 ![UML diagram](/public/images/uml-diagram.png)
 
